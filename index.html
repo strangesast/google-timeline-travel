@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timeline Road Trips</title>
+<style>
+  :root{--ink:#161a1f;--muted:#6b7280;--line:#e3e7ec;--blue:#1a73ff;
+    --shadow:0 1px 3px rgba(20,30,50,.07),0 12px 34px rgba(20,30,50,.09)}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#eef1f5}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 24px}
+  h1{font-size:30px;margin:0}
+  .lead{color:var(--muted);font-size:15px;margin:8px 0 32px;line-height:1.5}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  a.card{display:block;text-decoration:none;color:inherit;background:#fff;
+    border:1px solid var(--line);border-radius:16px;padding:22px 22px 20px;
+    box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s}
+  a.card:hover{transform:translateY(-2px);
+    box-shadow:0 2px 6px rgba(20,30,50,.09),0 20px 46px rgba(20,30,50,.13)}
+  .card .ico{font-size:26px}
+  .card h2{font-size:18px;margin:12px 0 4px}
+  .card p{font-size:13px;color:var(--muted);margin:0;line-height:1.5}
+  .note{margin-top:30px;font-size:12px;color:var(--muted);line-height:1.6}
+  @media (max-width:560px){.cards{grid-template-columns:1fr}}
+  @media (prefers-color-scheme:dark){
+    html,body{background:#0f1216;color:#e7eaee}
+    a.card{background:#171a1f;border-color:#272b31}
+    :root{--muted:#9aa0a6;--line:#272b31}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Timeline Road Trips</h1>
+    <p class="lead">Road trips extracted from Google Timeline, projected onto OpenStreetMap
+      roads. Published without dates — season is the only indication of when.</p>
+    <div class="cards">
+      <a class="card" href="./viewer.html">
+        <div class="ico">🚗</div>
+        <h2>Trip viewer</h2>
+        <p>A sample of trips, each with its road-projected path, an overview map,
+           and key facts (distance, average speed, stops).</p>
+      </a>
+      <a class="card" href="./density.html">
+        <div class="ico">🗺️</div>
+        <h2>Travel density</h2>
+        <p>Every trip at once — overlapping low-opacity lines make the
+           most-travelled corridors render darker.</p>
+      </a>
+    </div>
+    <p class="note">Basemap © OpenStreetMap contributors © CARTO · road-matching via OSRM.</p>
+  </div>
+</body>
+</html>

@@ -6,10 +6,6 @@ import TRIPS from '@trips';
 
 const SEASON_COLORS={Winter:"#4a90d9",Spring:"#2fa84f",Summer:"#f0a500",Fall:"#e0701a"};
 const CAT_CLASS={"long-haul":"cat-long","regional":"cat-regional","local":"cat-local"};
-const LIGHT="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
-const NOLABELS="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png";
-const VOYAGER="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png";
-const ATTR='© OpenStreetMap © CARTO';
 const CATS=[["long-haul","Long-haul · ≥300 km from home"],
             ["regional","Regional · 75–300 km"],["local","Local · <75 km"]];
 
@@ -77,7 +73,8 @@ function initDetail(){
   MapSettings.manage(map,{maxZoom:19});   // basemap governed by shared Map settings
   preview=L.map('preview',{zoomControl:false,attributionControl:false,dragging:false,
     scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,tap:false}).setView([43,-77],5);
-  L.tileLayer(VOYAGER,{subdomains:'abcd',maxZoom:12,attribution:ATTR}).addTo(preview);
+  // political-boundary overview: always Voyager+labels, via the shared tile source
+  MapSettings.manage(preview,{maxZoom:12,forceBase:'voyager',forceLabels:true});
   map.on('zoomend',animatePaths);
 }
 function clearD(){

@@ -45,12 +45,7 @@ def leg_quality(trip_journeys):
     return real, fallback
 
 def main():
-    path = "location-history.json"
-    segs = R.load_segments(path)
-    current_home, _ = R.build_home_lookup(path and segs)
-    legs, _ = R.extract_legs(segs)
-    journeys = R.chain_journeys(legs)
-    trips_j = R.group_trips(journeys, segs, current_home)
+    segs, current_home, trips_j = R.run_pipeline("location-history.json")
     # pair each assessed trip with its underlying journeys+legs
     enriched = []
     for tj in trips_j:

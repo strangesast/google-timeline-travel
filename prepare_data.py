@@ -3,24 +3,35 @@
   src/data/<name>.dev.json     full fidelity (exact dates) — gitignored, local
   src/data/<name>.public.json  redacted (season only) — leak-gated
 Run after the extraction pipeline (geo_export.py / export_all.py / osrm_match.py).
+
+All tiers are loaded, redacted, and leak-gated BEFORE anything is written, so a
+gate failure on one tier cannot leave a stale/mismatched public.json for another.
 """
 import json, os, sys
 from redact import redact_trip, scan_for_leaks
 
-os.makedirs("src/data", exist_ok=True)
+SPECS = [("trips_geo_matched.json", "trips"), ("all_trips_geo.json", "alltrips")]
 
-def emit(src, name):
+
+def prepare(src, name):
     if not os.path.exists(src):
         sys.exit(f"missing {src} — run the extraction pipeline first")
     trips = json.load(open(src))
-    json.dump(trips, open(f"src/data/{name}.dev.json", "w"))
     public = [redact_trip(t) for t in trips]
-    txt = json.dumps(public)
-    leaks = scan_for_leaks(txt)
+    leaks = scan_for_leaks(json.dumps(public))
     if leaks:
         sys.exit(f"PII leak gate FAILED for {name}: {leaks}")
-    open(f"src/data/{name}.public.json", "w").write(txt)
-    print(f"{name}: dev + public written ({len(trips)} trips) · leak-gate OK")
+    return name, trips, public
 
-emit("trips_geo_matched.json", "trips")
-emit("all_trips_geo.json", "alltrips")
+
+def main():
+    os.makedirs("src/data", exist_ok=True)
+    prepared = [prepare(src, name) for src, name in SPECS]   # exits before any write on failure
+    for name, dev, public in prepared:
+        json.dump(dev, open(f"src/data/{name}.dev.json", "w"))
+        json.dump(public, open(f"src/data/{name}.public.json", "w"))
+        print(f"{name}: dev + public written ({len(dev)} trips) · leak-gate OK")
+
+
+if __name__ == "__main__":
+    main()

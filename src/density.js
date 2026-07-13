@@ -4,8 +4,6 @@ import './density.css';
 import { MapSettings } from './mapsettings.js';
 import TRIPS from '@alltrips';
 
-const LIGHT="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
-const ATTR='© OpenStreetMap © CARTO';
 const CAT_COLOR={"long-haul":"#1a73ff","regional":"#12a150","local":"#f59e0b"};
 const DENSITY_COLOR="#1a4fd6";
 

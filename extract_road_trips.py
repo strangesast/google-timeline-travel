@@ -471,5 +471,16 @@ def main():
     print(f"Wrote road_trips.json ({len(trips)} trips) and road_trips.csv")
 
 
+def run_pipeline(path="location-history.json"):
+    """Full extraction bootstrap shared by the export/sample scripts.
+    Returns (segments, current_home lookup, list-of-trip-journeys)."""
+    segs = load_segments(path)
+    current_home, _ = build_home_lookup(segs)
+    legs, _ = extract_legs(segs)
+    journeys = chain_journeys(legs)
+    trips_j = group_trips(journeys, segs, current_home)
+    return segs, current_home, trips_j
+
+
 if __name__ == "__main__":
     main()

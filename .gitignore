@@ -12,8 +12,8 @@ all_trips_geo.json
 road_trips.json
 road_trips.csv
 
-# ---- Generated data tiers (dev tier = PII); regenerate via prepare_data.py ----
-src/data/
+# ---- Data tiers: dev = PII (never commit); public = redacted (committed, hosted) ----
+src/data/*.dev.json
 
 # ---- Build artifacts ----
 dist/
@@ -28,3 +28,4 @@ __pycache__/
 .venv/
 venv/
 .DS_Store
+dist-dev/

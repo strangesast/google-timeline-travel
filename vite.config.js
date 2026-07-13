@@ -6,16 +6,20 @@ import { resolve } from 'node:path';
 //   (any other)  -> public data (redacted; season only). This is the default,
 //                   so `vite build` and `vite preview` are safe by default.
 export default defineConfig(({ mode }) => {
-  const tier = mode === 'dev' ? 'dev' : 'public';
+  const isDev = mode === 'dev';
+  const tier = isDev ? 'dev' : 'public';
   const dir = import.meta.dirname;
   return {
     root: dir,
     base: './',        // relative asset paths → deployable under any subpath
     build: {
-      outDir: 'dist',
+      // dev tier (full dates) NEVER shares the deployable dist/ — separate dir
+      // so a `build:dev` can't be accidentally published.
+      outDir: isDev ? 'dist-dev' : 'dist',
       emptyOutDir: true,
       rollupOptions: {
         input: {
+          main: resolve(dir, 'index.html'),
           viewer: resolve(dir, 'viewer.html'),
           density: resolve(dir, 'density.html'),
         },

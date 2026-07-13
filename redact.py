@@ -52,11 +52,15 @@ def redact_trip(t):
 
 # fields/patterns a public artifact must NOT contain (build-time leak gate)
 import re
+_MONTHS = "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec"
 LEAK_PATTERNS = [
     (re.compile(r"\b\d{4}-\d{2}-\d{2}\b"), "ISO date (YYYY-MM-DD)"),
     (re.compile(r"\b\d{1,2}:\d{2}:\d{2}\b"), "clock time (HH:MM:SS)"),
-    (re.compile(r'"(start|end|date_label|month_label)"\s*:'), "raw date field"),
-    (re.compile(r"Inferred Home|Inferred Work"), "residence semantic label"),
+    # human-formatted absolute date, e.g. "Jul 13, 2026" (month_label format)
+    (re.compile(rf"\b(?:{_MONTHS})[a-z]* \d{{1,2}}, \d{{4}}\b"), "formatted date"),
+    (re.compile(r'"(start|end|date|date_label|month_label)"\s*:'), "raw date field"),
+    # any residence/workplace tag, not just the "Inferred " variants
+    (re.compile(r"\b(?:Inferred )?(?:Home|Work)\b"), "residence semantic label"),
 ]
 
 

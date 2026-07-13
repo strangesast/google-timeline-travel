@@ -27,8 +27,8 @@ def collect_points(segs, t0, t1):
                 if not p:
                     continue
                 try:
-                    off = float(pt.get("durationMinutesOffsetFromStartTime", 0))
-                except ValueError:
+                    off = float(pt.get("durationMinutesOffsetFromStartTime") or 0)
+                except (ValueError, TypeError):
                     off = 0
                 rows.append((base.timestamp() + off * 60, p[0], p[1]))
         elif s["kind"] == "activity":
@@ -41,11 +41,13 @@ def collect_points(segs, t0, t1):
     # dedupe consecutive identical, split polyline on big jumps (>25 km)
     lines, cur, prev = [], [], None
     for _, la, ln in rows:
-        if prev and R.haversine((la, ln), prev) > 25:
+        d = R.haversine((la, ln), prev) if prev else None
+        if d is not None and d > 25:
             if len(cur) > 1:
                 lines.append(cur)
             cur = []
-        if not prev or R.haversine((la, ln), prev) > 0.02:  # >20 m
+            prev = None
+        if prev is None or d > 0.02:  # >20 m
             cur.append([round(la, 5), round(ln, 5)])
             prev = (la, ln)
     if len(cur) > 1:
@@ -67,11 +69,7 @@ def odometer_ratio(segs, t0, t1):
     return real, real + fb
 
 def main():
-    segs = R.load_segments("location-history.json")
-    current_home, _ = R.build_home_lookup(segs)
-    legs, _ = R.extract_legs(segs)
-    journeys = R.chain_journeys(legs)
-    trips_j = R.group_trips(journeys, segs, current_home)
+    segs, current_home, trips_j = R.run_pipeline("location-history.json")
     enriched = [(R.assess_trip(tj, segs, current_home)) for tj in trips_j]
 
     by_cat = {"long-haul": [], "regional": [], "local": []}
@@ -81,7 +79,8 @@ def main():
     rng = random.Random(SEED)
     out = []
     for cat in ("long-haul", "regional", "local"):
-        for t in rng.sample(by_cat[cat], 3):
+        pool = by_cat[cat]
+        for t in rng.sample(pool, min(3, len(pool))):
             t0, t1 = parse(t["start"]), parse(t["end"])
             lines = collect_points(segs, t0, t1)
             npts = sum(len(l) for l in lines)

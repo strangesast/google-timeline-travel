@@ -7,11 +7,7 @@ from datetime import datetime
 import extract_road_trips as R
 from geo_export import collect_points
 
-segs = R.load_segments("location-history.json")
-current_home, _ = R.build_home_lookup(segs)
-legs, _ = R.extract_legs(segs)
-journeys = R.chain_journeys(legs)
-trips_j = R.group_trips(journeys, segs, current_home)
+segs, current_home, trips_j = R.run_pipeline("location-history.json")
 
 out = []
 for tj in trips_j:

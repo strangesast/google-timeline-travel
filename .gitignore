@@ -1,0 +1,30 @@
+# ---- Raw Google Takeout / Timeline data (FULL PII — never commit) ----
+location-history.json
+takeout-*.tgz
+takeout-*.zip
+Takeout/
+*.mbox
+
+# ---- Intermediate exports (exact dates/times + precise coordinates) ----
+trips_geo.json
+trips_geo_matched.json
+all_trips_geo.json
+road_trips.json
+road_trips.csv
+
+# ---- Generated data tiers (dev tier = PII); regenerate via prepare_data.py ----
+src/data/
+
+# ---- Build artifacts ----
+dist/
+map_viewer.html
+all_trips.html
+*.dev.html
+
+# ---- Node / Python tooling ----
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store

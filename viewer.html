@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timeline Road Trips</title>
+</head>
+<body>
+
+  <div id="listview"></div>
+
+  <div id="detailview">
+    <div id="mapwrap">
+      <div id="map"></div>
+      <button id="back" title="Back to all trips">&#8592;</button>
+      <div class="brand">Timeline Road Trips <span>· road-projected GPS</span></div>
+    </div>
+    <aside>
+      <div class="detail">
+        <div class="plabel">TRIP OVERVIEW · political boundaries</div>
+        <div id="preview"></div>
+        <h1 class="dt" id="title">—</h1>
+        <div class="sub"><span class="badge" id="season"></span><span class="date" id="date"></span><span class="uni" id="uni"></span></div>
+        <div class="grid" id="grid"></div>
+        <div class="qual" id="qual"></div>
+        <div class="foot">Blue trace = recorded GPS snapped to OSM road segments (OSRM map-matching).
+          Basemap © OpenStreetMap contributors © CARTO.</div>
+      </div>
+    </aside>
+  </div>
+<script type="module" src="/src/viewer.js"></script>
+</body>
+</html>

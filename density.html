@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Road Trips · travel density</title>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="panel">
+  <h1>All Road Trips</h1>
+  <div class="sub"><b id="ntrips"></b> car trips · <b id="npts"></b> GPS points<br>
+    darker = more-travelled corridors</div>
+  <div class="seg">
+    <button id="mDensity" class="on" onclick="setMode('density')">Density</button>
+    <button id="mCat" onclick="setMode('cat')">By category</button>
+  </div>
+  <div class="ctl">Intensity
+    <input id="op" type="range" min="3" max="22" value="8" oninput="setOpacity(this.value/100)">
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="foot">Recorded GPS (road-following) drawn at low opacity on a canvas layer;
+    overlaps accumulate. Basemap © OpenStreetMap contributors © CARTO.</div>
+</div>
+<script type="module" src="/src/density.js"></script>
+</body>
+</html>
